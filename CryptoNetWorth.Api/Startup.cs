@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using CryptoNetWorth.Data;
 
 namespace CryptoNetWorth.Api
 {
@@ -29,6 +31,10 @@ namespace CryptoNetWorth.Api
         {
             // Add framework services.
             services.AddMvc();
+            // add data service to IOC container
+            services.AddScoped<ICryptoNetWorthDataService, CryptoNetWorthDataService>();
+            // add db context to IOC container
+            services.AddDbContext<CryptoNetWorthContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
