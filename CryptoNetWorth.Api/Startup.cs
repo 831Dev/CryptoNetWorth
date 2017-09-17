@@ -35,6 +35,7 @@ namespace CryptoNetWorth.Api
             services.AddScoped<ICryptoNetWorthDataService, CryptoNetWorthDataService>();
             // add db context to IOC container
             services.AddDbContext<CryptoNetWorthContext>();
+            CryptoNetWorthContext.ConnectionString = Configuration.GetConnectionString("db");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +43,14 @@ namespace CryptoNetWorth.Api
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            // Make sure the database is created and seeded
+			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+			{
+                var context = serviceScope.ServiceProvider.GetService<CryptoNetWorthContext>();
+				context.Database.EnsureCreated();
+				context.EnsureSeedData();
+			}
 
             app.UseMvc();
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CryptoNetWorth.Domain;
 
 namespace CryptoNetWorth.Data

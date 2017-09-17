@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using CryptoNetWorth.Domain;
 
 namespace CryptoNetWorth.Data
@@ -9,11 +8,44 @@ namespace CryptoNetWorth.Data
     {
         public virtual DbSet<DigitalAsset> DigitalAsset { get; set; }
 
+        public static string ConnectionString { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // the connection string should be stored in a settings file. here I'm masking the host so it's OK for demo purposes
-            optionsBuilder.UseMySql(@"Server=mysql;User Id=cryptonetworthapp;Password=cryptonEtworth@@123;Database=cryptonetworth");
+            optionsBuilder.UseMySql(ConnectionString);
+        }
+
+        public void EnsureSeedData()
+        {
+            if (!DigitalAsset.Any())
+            {
+				var btc = new DigitalAsset()
+				{
+					Name = "Bitcoin",
+					Symbol = "BTC",
+					Units = .25
+				};
+
+				var eth = new DigitalAsset()
+				{
+					Name = "Ether",
+					Symbol = "ETH",
+					Units = 7
+				};
+
+				var ltc = new DigitalAsset()
+				{
+					Name = "Litecoin",
+					Symbol = "LTC",
+					Units = 5
+				};
+
+                DigitalAsset.Add(btc);
+                DigitalAsset.Add(eth);
+                DigitalAsset.Add(ltc);
+
+                this.SaveChanges();
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
