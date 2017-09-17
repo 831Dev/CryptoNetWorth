@@ -19,9 +19,22 @@ namespace CryptoNetWorth.Data
             return _context.DigitalAsset.ToList();
         }
 
+        public DigitalAsset GetDigitalAsset(string symbol)
+        {
+            return _context.DigitalAsset.SingleOrDefault(x => x.Symbol == symbol);
+        }
+
         public DigitalAsset Add(DigitalAsset da)
 		{
-			_context.DigitalAsset.Add(da);
+            if (_context.DigitalAsset.Any(x => x.Symbol == da.Symbol))
+            {
+                _context.DigitalAsset.SingleOrDefault(x => x.Symbol == da.Symbol).Units += da.Units;
+            }
+            else
+            {
+                _context.DigitalAsset.Add(da);
+            }
+
 			_context.SaveChanges();
             return da;
 		}

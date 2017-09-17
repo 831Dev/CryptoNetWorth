@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using CryptoNetWorth.Data;
 using CryptoNetWorth.Domain;
 
@@ -21,13 +22,20 @@ namespace CryptoNetWorth.Api.Controllers
 		[HttpGet]
 		public IActionResult Get()
 		{
-			return Ok(_dataService.GetDigitalAssets());
+            try
+            {
+                return Ok(_dataService.GetDigitalAssets());
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
 		}
 
         [HttpGet("{id}")]
-        public string Get(string id)
+        public IActionResult Get(string id)
         {
-            return "value";
+            return Ok(_dataService.GetDigitalAsset(id));
         }
 
         [HttpPost]
