@@ -9,11 +9,13 @@ A simple .NET Core Api using EF Core, MySQL, and Docker.
 1. Clone repo
 2. Add your MySQL server credentials to CryptoNetWorth.Api > appsettings.json
 
-## RUNNING LOCALLY WITH KESTREL
+### RUNNING LOCALLY WITH KESTREL
 1. dotnet restore
 2. cd CryptoNetWorth.Api
 3. dotnet run
+4. access http://localhost:5000/api/digitalassets
 
 ### RUNNING FROM DOCKER
 1. docker build -t cryptonetworth .
 2. docker run -d -p 8080:80 --name cryptonetworthapp cryptonetworth
+3. access http://localhost:8080/api/digitalassets
